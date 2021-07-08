@@ -1,9 +1,9 @@
 from tkinter import *
 from tkinter import messagebox
+from PIL import ImageTk, Image
 import pymysql
 
 root = Tk()
-
 
 class Main_Window:
     def __init__(self):
@@ -12,25 +12,27 @@ class Main_Window:
         self.root.geometry("500x400")
         self.root.config(bg='white')
 
+        self.img = ImageTk.PhotoImage(file="Logo-Life-Choices.jpg")
+        Label(self.root, image=self.img, height=130, width=400).place(x=50, y=20)
+
         # Labels And Entry Boxes Login
 
         self.entry = Entry(self.root)
-        self.entry.place(x=75, y=140)
-        self.entry.insert(0, 'username')
+        self.entry.place(x=250, y=200)
+        self.label = Label(self.root, text="Username", bg="white").place(x=100, y=200)
 
         self.entry2 = Entry(self.root)
-        self.entry2.place(x=75, y=220)
-        self.entry2.insert(0, '  *****')
+        self.entry2.place(x=250, y=250)
         self.entry2.config(show='*')
+        self.label2 = Label(self.root, text="Password", bg="white").place(x=100, y=250)
 
         self.login_button = Button(self.root, text='LOGIN',command=lambda: self.login_database())
-        self.login_button.place(x=75, y=300)
+        self.login_button.place(x=300, y=300)
 
-        self.label = Label(self.root, text="Dont Have an Account?")
-        self.label.place(x=95, y=360)
+        self.label = Label(self.root, text="Dont Have an Account?", bg="white").place(x=100, y=360)
 
-        self.r_button = Button(self.root, text='SignUp', command=lambda: self.Signup_Frame())
-        self.r_button.place(x=268, y=353)
+        self.sign = Button(self.root, text='SignUp', command=lambda: self.Signup_Frame())
+        self.sign.place(x=295, y=350)
 
     def Signup_Frame(self):
         signup = Toplevel()
