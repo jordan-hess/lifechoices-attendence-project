@@ -1,7 +1,9 @@
 from tkinter import *
 from tkinter import messagebox
-from PIL import ImageTk, Image
+from PIL import ImageTk
 import pymysql
+con = pymysql.connect(user="lifechoices", password="@Lifechoices1234", database="register")
+import mysql.connector
 
 root = Tk()
 
@@ -14,6 +16,8 @@ class Main_Window:
 
         self.img = ImageTk.PhotoImage(file="Logo-Life-Choices.jpg")
         Label(self.root, image=self.img, height=130, width=400).place(x=50, y=20)
+
+
 
         # Labels And Entry Boxes Login
 
@@ -43,7 +47,10 @@ class Main_Window:
 
         # all Labels for registration
 
-        self.head = Label(self.signup, text="Create Your Account", bg="light gray").place(x=420, y=130)
+        self.img2 = ImageTk.PhotoImage(file="Life-Choices-150x150.jpg")
+        Label(self.signup, image=self.img2, height=130, width=400, bg="light gray").place(x=220, y=10)
+
+        self.head = Label(self.signup, text="Create Your Account", bg="light gray").place(x=420, y=150)
 
         self.lbl_Name = Label(self.signup, text='Name :', bg="light gray").place(x=240, y=190)
 
@@ -98,19 +105,36 @@ class Main_Window:
     # Database
 
     def Registration(self):
-            con = pymysql.connect(user="lifechoices", password="@Lifechoices1234", database="register")
+        a = self.nm_entry.get()
+        b = self.passw_entry.get()
+        c = self.id_entry.get()
+        d = self.num_entry.get()
+        e = self.rel_entry.get()
+        f = self.rel_num_entry.get()
+        g = self.user_nm_entry.get()
+        h = self.passw_entry.get()
+        if a == '':
+            messagebox.showerror(message="Error! make sure all entries are filled in")
+        else:
             cur = con.cursor()
-            cur.execute("insert into register values (%s, %s, %s, %s ,%s, %s,%s, %s)", (self.nm_entry.get(), self.surnm_entry.get(), self.num_entry.get(), self.id_entry.get(), self.rel_entry.get(), self.rel_num_entry, self.user_nm_entry.get(),self.passw_entry.get()))
-            con.commit()
-            con.close()
-            messagebox.showinfo("Success", 'Account Created Succesfully')
-            self.Exit_Signup()
+            insert_stmt = (
+                "INSERT INTO register (Names, Surnames, Id_Number, Number, relative_nm, relative_num, Username, Password, signin_date, signin_time, signout_time)"
+                "VALUES (%s, %s, %s, %s ,%s, %s,%s, %s)"
+            )
+            data = (a, b, c, d, e, f, g, h)
+            try:
+                cur.execute(insert_stmt, data)
+                con.commit()
+                messagebox.showinfo("Well done", "Success")
+            except:
+                con.rollback()
+                messagebox.showinfo("Success", "account created successfully")
 
     # login
     def login_database(self):
-        if self.entry.get() == "Username":
+        if self.entry.get() == "":
             messagebox.showerror("Error", 'Please Enter User Name To Login')
-        elif self.entry2.get() == 'Password':
+        elif self.entry2.get() == '':
             messagebox.showerror("Error", 'Please Enter Password To Login')
         else:
             con = pymysql.connect(user="lifechoices", password="@Lifechoices1234", database="register")
@@ -130,6 +154,15 @@ class Main_Window:
         self.entry2.delete(0, END)
         self.entry.insert(0, '  username')
         self.entry2.insert(0, '  *****')
+
+
+def open_adim_frame(e=None):
+    import Admin
+
+
+root.bind('<Control-a>', open_adim_frame)
+
+
 
 
 m = Main_Window()
